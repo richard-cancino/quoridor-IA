@@ -1,3 +1,4 @@
+import datetime
 import math
 
 from src.settings import *
@@ -85,6 +86,7 @@ class Path:
         TRACE["Path.BreadthFirstSearch"] += 1
 
         print("Esta utilizando BFS en este movimiento")
+        time_start = datetime.datetime.now()
         root = PawnMove(None, startCoord)
 
         previousMoves = {startCoord: root}
@@ -99,6 +101,9 @@ class Path:
                         move = previousMoves[move.fromCoord]
                         pathMoves.append(move)
                     pathMoves.reverse()
+                    time_end = datetime.datetime.now()
+                    duration = time_end - time_start
+                    print('Se demoró alrededor de ' + str(duration.microseconds) + ' microsegundos')
                     return Path(pathMoves[1:])
             validMoves = validPawnMoves[move.toCoord]
             sorted(validMoves,
@@ -113,7 +118,7 @@ class Path:
     def Dijkstra(board, startCoord, endCoords, moveScore=lambda move, step: 1,
                  ignorePawns=False):
         """
-        3ER ALGORITMO USADO === Dijkstra
+        2do ALGORITMO USADO === Dijkstra
 
         Hecho por Richard
 
@@ -128,15 +133,15 @@ class Path:
         """
         global TRACE
         TRACE["Path.Dijkstra"] += 1
-        print("Esta utilizando Dijkstra en este movimiento")
-
+        time_start = datetime.datetime.now()
         root = PawnMove(None, startCoord)
-
+        i = 0
         previousMoves = {startCoord: (0, root)}
         nextMoves = [(0, 0, root)]
         validPawnMoves = board.storedValidPawnMovesIgnoringPawns \
             if ignorePawns else board.storedValidPawnMoves
         while nextMoves:
+            i = i + 1
             sorted(nextMoves,
                    key=lambda nextMove: nextMove[1])
             (step, score, move) = nextMoves.pop(0)
@@ -147,6 +152,11 @@ class Path:
                         move = previousMoves[move.fromCoord][1]
                         pathMoves.append(move)
                     pathMoves.reverse()
+                    time_end = datetime.datetime.now()
+                    if i > 61:
+                        print('Esta utilizando BFS en este movimiento')
+                        duration = time_end - time_start
+                        print('Se demoró alrededor de ' + str(duration.microseconds) + ' microsegundos')
                     return Path(pathMoves[1:])
             validMoves = validPawnMoves[move.toCoord]
             sorted(validMoves,
@@ -163,43 +173,37 @@ class Path:
                         validMoveScore, validMove)
         return None
 
-    def DepthFirstSearch(self, visited, graph, node):
-        """
-        3ER ALGORITMO USADO === DFS
-
-        Hecho por Luis Ticona
-
-        Una Búsqueda en profundidad (Depth First Search) es un algoritmo de
-        búsqueda no informada utilizado para recorrer todos los nodos de un
-        grafo o árbol (teoría de grafos) de manera ordenada, pero no uniforme.
-        """
-
-        global TRACE
-        TRACE["Path.DepthFirstSearch"] += 1
-
-        if node not in visited:
-            print(node)
-            visited.add(node)
-            for neighbour in graph[node]:
-                self.DepthFirstSearch(visited, graph, neighbour)
-
-        def dfs_paths(graph, start, goal):
-            stack = [(start, [start])]
-            while stack:
-                (vertex, path) = stack.pop()
-                for next in graph[vertex] - set(path):
-                    if next == goal:
-                        yield path + [next]
-                    else:
-                        stack.append((next, path + [next]))
-
-        return None
-
 
 # TODO = Algoritmo requerido por el curso, se implementó A-start para cumplir
 #  los requisitos del curso
 
 def Astar(maze, start, end):
+    """
+    Así, el algoritmo A* representa el valor
+    heurístico del nodo a evaluar desde el actual, n, hasta el final, y
+    la otra funcion, el coste real del camino
+    recorrido para llegar a dicho nodo, n, desde el nodo inicial. A* mantiene
+    dos estructuras de datos auxiliares, que podemos denominar abiertos,
+    implementado como una cola de prioridad (ordenada por el valor
+    {\displaystyle f(n)}{\displaystyle f(n)} de cada nodo), y cerrados, donde
+    se guarda la información de los nodos que ya han sido visitados. En cada
+    paso del algoritmo, se expande el nodo que esté primero en abiertos, y en
+    caso de que no sea un nodo objetivo, calcula la
+    {\displaystyle f(n)}{\displaystyle f(n)} de todos sus hijos, los inserta
+    en abiertos, y pasa el nodo evaluado a cerrados.
+
+    El algoritmo es una combinación entre búsquedas del tipo primero en anchura
+    con primero en profundidad: mientras que {\displaystyle h'(n)}{\displaystyle h'(n)}
+    tiende a primero en profundidad, {\displaystyle g(n)}{\displaystyle g(n)} tiende
+    a primero en anchura. De este modo, se cambia de camino de búsqueda
+    cada vez que existen nodos más prometedores.
+    """
+    global TRACE
+    TRACE["Path.AStar"] += 1
+
+    print("Esta utilizando AStar en este movimiento")
+    time_start = datetime.datetime.now()
+
     start_node = Node(None, start)
     start_node.g = start_node.h = start_node.f = 0
     end_node = Node(None, end)
@@ -282,3 +286,6 @@ def Astar(maze, start, end):
 
             # Add the child to the open list
             open_list.append(child)
+    print('Esta utilizando Astar en este movimiento')
+    duration = time_end - time_start
+    print('Se demoró alrededor de ' + str(duration.microseconds) + ' microsegundos')

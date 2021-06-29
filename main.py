@@ -22,9 +22,9 @@ def readArguments():
     squareSize = 70
 
     # playersConsts = ['Alumno-UPC:Human', 'LutimiBot:BuildAndRunBot',
-    #                'ElioBot:BuildAndRunBot', 'RichiBot:BuildAndRunBot']
+    #                'GonzaloBot:BuildAndRunBot', 'RichiBot:BuildAndRunBot']
 
-    playersConsts = ['Alumno-UPC:Human', 'LutimiBot:BuildAndRunBot']
+    playersConsts = ['Alumno-UPC:Human', 'ElioBot:BuildAndRunBot']
 
     for playerData in playersConsts:
 

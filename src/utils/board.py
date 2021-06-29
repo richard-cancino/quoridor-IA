@@ -358,8 +358,8 @@ class Board(IDrawable):
             self.fences.append(checkedFence)
             for player in self.game.players:
                 if player.name == 'LutimiBot' or player.name == 'RichiBot':
-                    if Path.BreadthFirstSearch(self, player.pawn.coord,
-                                               player.endPositions) is None:
+                    if Path.BreadthFirstSearch(self, player.pawn.coord, player.endPositions) is None:
+                    # if AStar(self, player.pawn.coord, player.endPositions) is None:
                         self.fences.pop()
                         return False
                 else:
@@ -381,8 +381,9 @@ class Board(IDrawable):
             self.fences.append(checkedFence)
             for player in self.game.players:
                 if player.name == 'LutimiBot' or player.name == 'RichiBot':
-                    if Path.BreadthFirstSearch(self, player.pawn.coord,
-                                               player.endPositions) is None:
+                    if Path.BreadthFirstSearch(self, player.pawn.coord, player.endPositions) is None:
+                    # if AStar(self, player.pawn.coord, player.endPositions) is None:
+
                         self.fences.pop()
                         return False
                 else:
@@ -489,10 +490,9 @@ class Board(IDrawable):
         isBlocking = False
         for player in self.game.players:
 
-            if player.name == 'LutimiBot' or player.name == 'RichiBot':
-                path = Path.BreadthFirstSearch(self, player.pawn.coord,
-                                               player.endPositions,
-                                               ignorePawns=True)
+            if player.name == 'ElioBot' or player.name == 'RichiBot':
+                path = Path.BreadthFirstSearch(self, player.pawn.coord, player.endPositions, ignorePawns=True)
+                # path = AStar(self, player.pawn.coord, player.endPositions,ignorePawns=True)
                 if path is None:
                     isBlocking = True
                     break
@@ -612,11 +612,11 @@ class Board(IDrawable):
     def getFencePlacingImpactOnPaths(self, fencePlacing: FencePlacing):
         stateBefore = {}
         for player in self.game.players:
-            if player.name == 'LutimiBot' or player.name == 'RichiBot':
+            if player.name == 'ElioBot' or player.name == 'RichiBot':
 
-                path = Path.BreadthFirstSearch(self, player.pawn.coord,
-                                               player.endPositions,
-                                               ignorePawns=True)
+                path = Path.BreadthFirstSearch(self, player.pawn.coord, player.endPositions, ignorePawns=True)
+                # path = AStar(self, player.pawn.coord, player.endPositions,ignorePawns=True)
+
                 if path is None:
                     print("Jugador %s ya esta bloqueado!" % (player.name))
                     return None
@@ -639,9 +639,9 @@ class Board(IDrawable):
         for player in self.game.players:
             if player.name == 'LutimiBot' or player.name == 'RichiBot':
 
-                path = Path.BreadthFirstSearch(self, player.pawn.coord,
-                                               player.endPositions,
-                                               ignorePawns=True)
+                path = Path.BreadthFirstSearch(self, player.pawn.coord, player.endPositions, ignorePawns=True)
+                # path = AStar(self, player.pawn.coord, player.endPositions,ignorePawns=True)
+
             else:
                 path = Path.Dijkstra(self, player.pawn.coord,
                                      player.endPositions,
